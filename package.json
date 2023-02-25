@@ -1,0 +1,28 @@
+{
+  "name": "authentication_authorization",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon server.js",
+    "test": "DOTENV_CONFIG_PATH=./env/.env.test jest --setupFiles=dotenv/config"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bcrypt": "^5.1.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "jsonwebtoken": "^9.0.0",
+    "mongodb": "^5.0.1",
+    "mongoose": "^6.9.2"
+  },
+  "devDependencies": {
+    "jest": "^29.4.3",
+    "morgan": "^1.10.0",
+    "nodemon": "^2.0.20",
+    "supertest": "^6.3.3"
+  }
+}
