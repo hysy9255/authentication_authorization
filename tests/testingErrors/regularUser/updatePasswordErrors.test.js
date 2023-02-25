@@ -9,7 +9,6 @@ const databaseUri = process.env.DB_URI_testingErrors_updatePassword;
 const {
   signUp,
   signIn,
-  deleteAccount,
   updatePassword,
 } = require("../../supertest/requestFunctions.js");
 
