@@ -1,0 +1,11 @@
+env/.env.sample
+env/.env.test
+env/.env.test.sample
+
+.DS_Store
+
+node_modules
+
+README.md
+
+tests
