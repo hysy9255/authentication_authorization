@@ -4,7 +4,7 @@ const {
   signInInformation,
 } = require("../../testData/testData.js");
 require("dotenv").config({ path: "../../../../env/.env" });
-const databaseUri = process.env.DATABASE_URI_FOR_testingErrors_signIn;
+const databaseUri = process.env.DB_URI_testingErrors_signIn;
 
 const { signUp, signIn } = require("../../supertest/requestFunctions.js");
 

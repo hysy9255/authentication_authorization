@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const { signUpInformation } = require("../../testData/testData.js");
 require("dotenv").config({ path: "../../../../env/.env" });
-const databaseUri = process.env.DATABASE_URI_FOR_testingAPIs_regularUser_signUP;
+const databaseUri = process.env.DB_URI_testingAPIs_regularUser_signUP;
 
 const { signUp } = require("../../supertest/requestFunctions.js");
 

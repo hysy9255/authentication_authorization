@@ -1,13 +1,10 @@
 const mongoose = require("mongoose");
-const jwt = require("jsonwebtoken");
 const {
   signUpInformation,
-  signInInformation,
   adminSignInInformation,
 } = require("../../testData/testData.js");
 require("dotenv").config({ path: "../../../../env/.env" });
-const databaseUri = process.env.DATABASE_URI_FOR_testingAPIs_adminUser_signIn;
-const secreteKey = process.env.SECRETE_KEY;
+const databaseUri = process.env.DB_URI_testingAPIs_adminUser_signIn;
 
 const {
   signIn,

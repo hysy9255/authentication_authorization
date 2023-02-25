@@ -4,12 +4,13 @@ const {
   signInInformation,
 } = require("../../testData/testData.js");
 require("dotenv").config({ path: "../../../../env/.env" });
-const databaseUri = process.env.DB_URI_testingErrors_deleteAccount;
+const databaseUri = process.env.DB_URI_testingErrors_updatePassword;
 
 const {
   signUp,
   signIn,
   deleteAccount,
+  updatePassword,
 } = require("../../supertest/requestFunctions.js");
 
 describe("Test regular user sign up errors", () => {
@@ -33,11 +34,10 @@ describe("Test regular user sign up errors", () => {
     const signInResponse = await signIn(signInInformation);
     const jsonWebToken = signInResponse.body.jsonWebToken;
     const password = "randomPassword";
+    const newPassword = "newRandomPassword";
     // when
-    const response = await deleteAccount(jsonWebToken, password);
+    const response = await updatePassword(jsonWebToken, password, newPassword);
     // expect
-    expect(response.body.message).toBe(
-      "The password passed in to verify the user is incorrect"
-    );
+    expect(response.body.message).toBe("Wrong password passed in");
   });
 });

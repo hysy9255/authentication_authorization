@@ -4,7 +4,7 @@ const {
   adminSignInInformation,
 } = require("../../testData/testData.js");
 require("dotenv").config({ path: "../../../../env/.env" });
-const databaseUri = process.env.DATABASE_URI_FOR_testingErrors_blockAccount;
+const databaseUri = process.env.DB_URI_testingErrors_blockAccount;
 
 const {
   signUp,

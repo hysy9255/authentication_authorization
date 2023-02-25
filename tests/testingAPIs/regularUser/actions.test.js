@@ -4,8 +4,7 @@ const {
   signInInformation,
 } = require("../../testData/testData.js");
 require("dotenv").config({ path: "../../../../env/.env" });
-const databaseUri =
-  process.env.DATABASE_URI_FOR_testingAPIs_regularUser_otherActions;
+const databaseUri = process.env.DB_URI_testingAPIs_regularUser_otherActions;
 
 const {
   signUp,
