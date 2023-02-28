@@ -4,6 +4,10 @@ const morgan = require("morgan");
 
 const authController = require("./src/controllers/auth.controller.js");
 
+const { signUpValidator } = require("./src/utils/signUpValidation.js");
+const { signInValidator } = require("./src/utils/signInValidation.js");
+const { adminValidator } = require("./src/utils/adminValidation.js");
+
 const createApp = () => {
   const app = express();
 
@@ -16,9 +20,9 @@ const createApp = () => {
     res.status(200).send("another hello authentication");
   });
 
-  app.post("/auth", authController.signUp);
+  app.post("/auth", signUpValidator, authController.signUp);
 
-  app.get("/auth", authController.signIn);
+  app.get("/auth", adminValidator, signInValidator, authController.signIn);
 
   app.patch("/auth", authController.updatePassword);
 

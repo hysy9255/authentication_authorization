@@ -6,29 +6,6 @@ require("dotenv").config({ path: "../../env/.env" });
 
 const signUp = async (userInformation) => {
   try {
-    if (
-      userInformation.name === undefined ||
-      userInformation.email === undefined ||
-      userInformation.password === undefined
-    ) {
-      throw new Error("One or more of the required fields are missing");
-    }
-
-    const validEmail = userInformation.email.split("").includes("@");
-    if (!validEmail) {
-      throw new Error("It's an invalid email address");
-    }
-
-    const validPassword = userInformation.password.length > 5;
-    if (!validPassword) {
-      throw new Error("It's an invalid password");
-    }
-
-    const alreadyInUse = await userDao.retrive(userInformation.email);
-    if (alreadyInUse) {
-      throw new Error("The email is already in use");
-    }
-
     const password = userInformation.password;
     const hashedPassword = await bcrypt.hash(password, 10);
 
@@ -44,39 +21,42 @@ const signIn = async (userInformation) => {
     const email = userInformation.email;
     const password = userInformation.password;
 
-    let isAdmin;
-    if (
-      email === process.env.ADMIN_EMAIL &&
-      password === process.env.ADMIN_PASSWORD
-    ) {
-      isAdmin = true;
-    }
+    // let isAdmin;
+    // if (
+    //   email === process.env.ADMIN_EMAIL &&
+    //   password === process.env.ADMIN_PASSWORD
+    // ) {
+    //   isAdmin = true;
+    // }
 
-    if (isAdmin) {
-      const payload = { email };
-      const jsonWebToken = jwt.sign(payload, process.env.ADMIN_SECRETE_KEY);
-      return jsonWebToken;
-    }
+    // if (isAdmin) {
+    //   const payload = { email };
+    //   const jsonWebToken = jwt.sign(payload, process.env.ADMIN_SECRETE_KEY);
+    //   return jsonWebToken;
+    // }
 
-    if (email === undefined || password === undefined) {
-      throw new Error("One or more of the required fields are missing");
-    }
+    // if (email === undefined || password === undefined) {
+    //   throw new Error("One or more of the required fields are missing");
+    // }
 
     const user = await userDao.retrive(email);
-    if (user === null) {
-      throw new Error("Given email is not found in DB");
-    }
+    // if (user === null) {
+    //   throw new Error("Given email is not found in DB");
+    // }
 
-    const hashedPassword = user.password;
-    const passwordMatches = await bcrypt.compare(password, hashedPassword);
-    console.log(passwordMatches);
-    if (passwordMatches) {
-      const payload = { email };
-      const jsonWebToken = jwt.sign(payload, process.env.SECRETE_KEY);
-      return jsonWebToken;
-    } else {
-      throw new Error("Passed in wrong password");
-    }
+    // const hashedPassword = user.password;
+    // const passwordMatches = await bcrypt.compare(password, hashedPassword);
+    // if (passwordMatches) {
+    //   const payload = { email };
+    //   const jsonWebToken = jwt.sign(payload, process.env.SECRETE_KEY);
+    //   return jsonWebToken;
+    // } else {
+    //   throw new Error("Passed in wrong password");
+    // }
+
+    const payload = { email };
+    const jsonWebToken = jwt.sign(payload, process.env.SECRETE_KEY);
+    return jsonWebToken;
   } catch (error) {
     throw error;
   }
