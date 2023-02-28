@@ -26,10 +26,9 @@ const signIn = async (req, res, next) => {
 const updatePassword = async (req, res, next) => {
   try {
     const userInformation = req.body;
-    const password = userInformation.password;
     const newPassword = userInformation.newPassword;
     const jsonWebToken = req.headers.authorization;
-    await authService.updatePassword(jsonWebToken, password, newPassword);
+    await authService.updatePassword(jsonWebToken, newPassword);
     res.status(200).json({ message: "Successfully updated the password!" });
   } catch (error) {
     next(error);
@@ -39,10 +38,7 @@ const updatePassword = async (req, res, next) => {
 const deleteAccount = async (req, res, next) => {
   try {
     const jsonWebToken = req.headers.authorization;
-    const userInformation = req.body;
-    const password = userInformation.password;
-
-    await authService.deleteAccount(jsonWebToken, password);
+    await authService.deleteAccount(jsonWebToken);
     res.status(200).json({ message: "Successfully deleted the account!" });
   } catch (error) {
     next(error);
@@ -51,10 +47,8 @@ const deleteAccount = async (req, res, next) => {
 
 const blockAccount = async (req, res, next) => {
   try {
-    const adminJwt = req.headers.authorization;
-    const requestBody = req.body;
-    const emailToBlock = requestBody.emailToBlock;
-    await authService.blockAccount(adminJwt, emailToBlock);
+    const emailToBlock = req.body.emailToBlock;
+    await authService.blockAccount(emailToBlock);
     res.status(200).json({ message: "Admin blocked the account" });
   } catch (error) {
     next(error);

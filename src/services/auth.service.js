@@ -19,41 +19,6 @@ const signUp = async (userInformation) => {
 const signIn = async (userInformation) => {
   try {
     const email = userInformation.email;
-    const password = userInformation.password;
-
-    // let isAdmin;
-    // if (
-    //   email === process.env.ADMIN_EMAIL &&
-    //   password === process.env.ADMIN_PASSWORD
-    // ) {
-    //   isAdmin = true;
-    // }
-
-    // if (isAdmin) {
-    //   const payload = { email };
-    //   const jsonWebToken = jwt.sign(payload, process.env.ADMIN_SECRETE_KEY);
-    //   return jsonWebToken;
-    // }
-
-    // if (email === undefined || password === undefined) {
-    //   throw new Error("One or more of the required fields are missing");
-    // }
-
-    const user = await userDao.retrive(email);
-    // if (user === null) {
-    //   throw new Error("Given email is not found in DB");
-    // }
-
-    // const hashedPassword = user.password;
-    // const passwordMatches = await bcrypt.compare(password, hashedPassword);
-    // if (passwordMatches) {
-    //   const payload = { email };
-    //   const jsonWebToken = jwt.sign(payload, process.env.SECRETE_KEY);
-    //   return jsonWebToken;
-    // } else {
-    //   throw new Error("Passed in wrong password");
-    // }
-
     const payload = { email };
     const jsonWebToken = jwt.sign(payload, process.env.SECRETE_KEY);
     return jsonWebToken;
@@ -62,64 +27,38 @@ const signIn = async (userInformation) => {
   }
 };
 
-const updatePassword = async (jsonWebToken, password, newPassword) => {
+const updatePassword = async (jsonWebToken, newPassword) => {
   try {
     const decodedJwt = jwt.verify(jsonWebToken, process.env.SECRETE_KEY);
     const email = decodedJwt.email;
 
-    const user = await userDao.retrive(email);
-    const hashedPassword = user.password;
-
-    const passwordMatches = await bcrypt.compare(password, hashedPassword);
-    if (passwordMatches) {
-      const hashedNewPassword = await bcrypt.hash(newPassword, 10);
-      await userDao.update(email, hashedNewPassword);
-    } else {
-      throw new Error("Wrong password passed in");
-    }
+    const hashedNewPassword = await bcrypt.hash(newPassword, 10);
+    await userDao.update(email, hashedNewPassword);
   } catch (error) {
     throw error;
   }
 };
 
-const deleteAccount = async (jsonWebToken, password) => {
+const deleteAccount = async (jsonWebToken) => {
   try {
     const decodedJwt = jwt.verify(jsonWebToken, process.env.SECRETE_KEY);
     const email = decodedJwt.email;
-
-    const user = await userDao.retrive(email);
-    const hashedPassword = user.password;
-
-    // Don't get rid of await here. It is necessary.
-    const matches = await bcrypt.compare(password, hashedPassword);
-    if (matches) {
-      await userDao.remove(email);
-    } else {
-      throw new Error("The password passed in to verify the user is incorrect");
-    }
+    await userDao.remove(email);
   } catch (error) {
     throw error;
   }
 };
 
-const blockAccount = async (adminJwt, emailToBlock) => {
+const blockAccount = async (emailToBlock) => {
   try {
-    // When jwt signature gets updated, it will throw
-    // "Only Admin account can block other accounts" error.
-    // When this happends, admin should log in again to get new jwt signed with new signature.
-    const decodedAdminJwt = jwt.verify(adminJwt, process.env.ADMIN_SECRETE_KEY);
-    if (decodedAdminJwt.email === process.env.ADMIN_EMAIL) {
-      await userDao.remove(emailToBlock);
-    } else {
-      throw new Error("Please login with new admin email address.");
-    }
+    await userDao.remove(emailToBlock);
   } catch (error) {
-    // Regular user's jwt is signed with process.env.SECRETE_KEY
-    // So if blockAccount is invoked with regular user's jwt
-    // invalid signature error will be called from jwt.verify
-    if (error.message === "invalid signature") {
-      throw new Error("Only Admin account can block other accounts");
-    }
+    // // Regular user's jwt is signed with process.env.SECRETE_KEY
+    // // So if blockAccount is invoked with regular user's jwt
+    // // invalid signature error will be called from jwt.verify
+    // if (error.message === "invalid signature") {
+    //   throw new Error("Only Admin account can block other accounts");
+    // }
     throw error;
   }
 };

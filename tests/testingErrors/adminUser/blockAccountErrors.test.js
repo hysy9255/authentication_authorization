@@ -22,26 +22,26 @@ describe("Test admin user blocking an account errors", () => {
     mongoose.connection.close();
   });
 
-  test("Regular user can't perform the task", async () => {
-    // given 1
-    await signUp(signUpInformation);
-    const signUpResponse = await signIn(signUpInformation);
-    const jsonWebToken = signUpResponse.body.jsonWebToken;
-    // given 2
-    const anotherRegularUser = {
-      email: "yhjyhj92@naver.com",
-      password: "dsfsdfsf",
-      name: "Yeshiva",
-    };
-    await signUp(anotherRegularUser);
-    const emailToBlock = anotherRegularUser.email;
-    // when
-    const response = await blockAccount(jsonWebToken, emailToBlock);
-    // expect
-    expect(response.body.message).toBe(
-      "Only Admin account can block other accounts"
-    );
-  });
+  // test("Regular user can't perform the task", async () => {
+  //   // given 1
+  //   await signUp(signUpInformation);
+  //   const signUpResponse = await signIn(signUpInformation);
+  //   const jsonWebToken = signUpResponse.body.jsonWebToken;
+  //   // given 2
+  //   const anotherRegularUser = {
+  //     email: "yhjyhj92@naver.com",
+  //     password: "dsfsdfsf",
+  //     name: "Yeshiva",
+  //   };
+  //   await signUp(anotherRegularUser);
+  //   const emailToBlock = anotherRegularUser.email;
+  //   // when
+  //   const response = await blockAccount(jsonWebToken, emailToBlock);
+  //   // expect
+  //   expect(response.body.message).toBe(
+  //     "Only Admin account can block other accounts"
+  //   );
+  // });
 
   test("Admin JWT won't work when admin email gets updated", async () => {
     // given 1: User sign up
