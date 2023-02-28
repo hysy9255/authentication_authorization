@@ -26,6 +26,10 @@ const createApp = () => {
 
   app.delete("/authAdmin", authController.blockAccount);
 
+  app.use((error, req, res, next) => {
+    res.status(400).json({ message: error.message });
+  });
+
   return app;
 };
 
