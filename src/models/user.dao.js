@@ -12,9 +12,9 @@ const insert = async (userInformation) => {
   }
 };
 
-const retrive = async (email) => {
+const retrieve = async (email) => {
   try {
-    const user = await User.findOne({ email });
+    const user = await User.findOne({ email }, { email: 1, name: 1 });
     return user;
   } catch (error) {
     throw error;
@@ -51,4 +51,4 @@ const remove = async (email) => {
   }
 };
 
-module.exports = { insert, retrive, update, remove };
+module.exports = { insert, retrieve, update, remove };

@@ -18,8 +18,7 @@ const signUp = async (userInformation) => {
 
 const signIn = async (userInformation) => {
   try {
-    const email = userInformation.email;
-    const payload = { email };
+    const payload = await userDao.retrieve(userInformation.email);
     const jsonWebToken = jwt.sign(payload, process.env.SECRETE_KEY);
     return jsonWebToken;
   } catch (error) {
