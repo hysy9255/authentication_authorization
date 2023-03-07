@@ -1,27 +1,37 @@
+const bcrypt = require("bcrypt");
 const mongoose = require("mongoose");
 const { userSchema } = require("../schemas/user.schema.js");
 
 const User = mongoose.model("user", userSchema);
 
-const insert = async (userInformation) => {
+const signUp = async (name, email, password) => {
   try {
-    const user = await User.create(userInformation);
+    const user = await User.create({
+      name,
+      email,
+      password,
+      isAdmin: false,
+      isBlocked: false,
+    });
     return user;
   } catch (error) {
     throw error;
   }
 };
 
-const retrieve = async (email) => {
+const findAnAccount = async (email) => {
   try {
-    const user = await User.findOne({ email }, { email: 1, name: 1 });
+    const user = await User.findOne(
+      { email },
+      { email: 1, name: 1, password: 1, isAdmin: 1, isBlocked: 1 }
+    );
     return user;
   } catch (error) {
     throw error;
   }
 };
 
-const update = async (email, newHashedPassword) => {
+const updatePassword = async (email, newHashedPassword) => {
   try {
     const user = await User.findOne({ email });
     if (user === null) {
@@ -37,18 +47,46 @@ const update = async (email, newHashedPassword) => {
   }
 };
 
-const remove = async (email) => {
+const deleteAccount = async (email) => {
   try {
-    const user = await User.findOne({ email });
-    if (user === null) {
-      throw new Error(
-        "There is no user that corresponds to the information given"
-      );
-    }
-    await User.deleteOne({ email });
+    const deleted = await User.deleteOne({ email });
+    return deleted;
   } catch (error) {
     throw error;
   }
 };
 
-module.exports = { insert, retrieve, update, remove };
+const blockAccount = async (emailToBlock) => {
+  try {
+    const user = await User.findOne({ email: emailToBlock });
+    user.isBlocked = true;
+    const blocked = await user.save();
+    return blocked;
+  } catch (error) {
+    throw error;
+  }
+};
+
+const createAdmin = async (name, email, password) => {
+  try {
+    const hashedPassword = await bcrypt.hash(password, 10);
+    const admin = await User.create({
+      name,
+      email,
+      password: hashedPassword,
+      isAdmin: true,
+    });
+    return admin;
+  } catch (error) {
+    console.log(error.message);
+  }
+};
+
+module.exports = {
+  signUp,
+  findAnAccount,
+  updatePassword,
+  deleteAccount,
+  blockAccount,
+  createAdmin,
+};

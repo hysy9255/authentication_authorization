@@ -3,10 +3,12 @@ require("dotenv").config({ path: "../../env/.env" });
 
 const signUp = async (req, res, next) => {
   try {
-    const userInformation = req.body;
-    await authService.signUp(userInformation);
-    const resBody = { message: "User has been created!" };
-    res.status(201).json(resBody);
+    const user = await authService.signUp(
+      req.body.name,
+      req.body.email,
+      req.body.password
+    );
+    res.status(201).json({ message: "User has been created!", userInfo: user });
   } catch (error) {
     next(error);
   }
@@ -14,10 +16,13 @@ const signUp = async (req, res, next) => {
 
 const signIn = async (req, res, next) => {
   try {
-    const userInformation = req.body;
-    const jsonWebToken = await authService.signIn(userInformation);
-    const resBody = { message: "Successfully signed in!", jsonWebToken };
-    res.status(200).send(resBody);
+    const [token, user] = await authService.signIn(
+      req.body.email,
+      req.body.password
+    );
+    res
+      .status(200)
+      .send({ message: "Successfully signed in!", token, data: user });
   } catch (error) {
     next(error);
   }
@@ -25,11 +30,16 @@ const signIn = async (req, res, next) => {
 
 const updatePassword = async (req, res, next) => {
   try {
-    const userInformation = req.body;
-    const newPassword = userInformation.newPassword;
-    const jsonWebToken = req.headers.authorization;
-    await authService.updatePassword(jsonWebToken, newPassword);
-    res.status(200).json({ message: "Successfully updated the password!" });
+    const token = req.headers.authorization;
+    const updated = await authService.updatePassword(
+      token,
+      req.body.password,
+      req.body.newPassword
+    );
+    res.status(200).json({
+      message: "Successfully updated the password!",
+      updatedUser: updated,
+    });
   } catch (error) {
     next(error);
   }
@@ -37,9 +47,16 @@ const updatePassword = async (req, res, next) => {
 
 const deleteAccount = async (req, res, next) => {
   try {
-    const jsonWebToken = req.headers.authorization;
-    await authService.deleteAccount(jsonWebToken);
-    res.status(200).json({ message: "Successfully deleted the account!" });
+    const token = req.headers.authorization;
+    const [deletedUser, deleted] = await authService.deleteAccount(
+      token,
+      req.body.password
+    );
+    res.status(200).json({
+      message: "Successfully deleted the account!",
+      deletedUser,
+      data: deleted,
+    });
   } catch (error) {
     next(error);
   }
@@ -47,9 +64,16 @@ const deleteAccount = async (req, res, next) => {
 
 const blockAccount = async (req, res, next) => {
   try {
-    const emailToBlock = req.body.emailToBlock;
-    await authService.blockAccount(emailToBlock);
-    res.status(200).json({ message: "Admin blocked the account" });
+    const token = req.headers.authorization;
+    const blockedUser = await authService.blockAccount(
+      token,
+      req.body.emailToBlock,
+      req.body.adminPassword
+    );
+    res.status(200).json({
+      message: "Admin blocked the account",
+      blockedUser: blockedUser,
+    });
   } catch (error) {
     next(error);
   }
