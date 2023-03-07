@@ -3,6 +3,7 @@ const cors = require("cors");
 const morgan = require("morgan");
 
 const authController = require("./src/controllers/auth.controller.js");
+const adminController = require("./src/controllers/admin.controller.js");
 
 const { signUpValidator } = require("./src/utils/signUpValidation.js");
 const { signInValidator } = require("./src/utils/signInValidation.js");
@@ -28,6 +29,9 @@ const createApp = () => {
   app.delete("/auth", authController.deleteAccount);
 
   app.delete("/authAdmin", authController.blockAccount);
+
+  // admin
+  app.get("/admin", adminController.getAllUsers);
 
   app.use((error, req, res, next) => {
     res.status(400).json({ message: error.message });

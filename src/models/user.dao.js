@@ -67,26 +67,10 @@ const blockAccount = async (emailToBlock) => {
   }
 };
 
-const createAdmin = async (name, email, password) => {
-  try {
-    const hashedPassword = await bcrypt.hash(password, 10);
-    const admin = await User.create({
-      name,
-      email,
-      password: hashedPassword,
-      isAdmin: true,
-    });
-    return admin;
-  } catch (error) {
-    console.log(error.message);
-  }
-};
-
 module.exports = {
   signUp,
   findAnAccount,
   updatePassword,
   deleteAccount,
   blockAccount,
-  createAdmin,
 };
