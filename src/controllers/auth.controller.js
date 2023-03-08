@@ -1,5 +1,5 @@
 const authService = require("../services/auth.service.js");
-require("dotenv").config({ path: "../../env/.env" });
+const superagent = require("superagent");
 
 const signUp = async (req, res, next) => {
   try {
@@ -8,7 +8,15 @@ const signUp = async (req, res, next) => {
       req.body.email,
       req.body.password
     );
-    res.status(201).json({ message: "User has been created!", userInfo: user });
+    const response = await superagent
+      .post("http://localhost:5000/myPage")
+      .send({ userInfo: user });
+
+    if (response.body.message === "Successfully posted") {
+      res
+        .status(201)
+        .json({ message: "User has been created!", userInfo: user });
+    }
   } catch (error) {
     next(error);
   }
