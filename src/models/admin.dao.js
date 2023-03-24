@@ -12,6 +12,18 @@ const getAllUsers = async () => {
   }
 };
 
+const blockAccount = async (emailToBlock) => {
+  try {
+    const user = await User.findOne({ email: emailToBlock });
+    user.isBlocked = true;
+    const blocked = await user.save();
+    return blocked;
+  } catch (error) {
+    throw error;
+  }
+};
+
 module.exports = {
   getAllUsers,
+  blockAccount,
 };

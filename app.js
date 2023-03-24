@@ -1,12 +1,8 @@
 const express = require("express");
 const cors = require("cors");
 const morgan = require("morgan");
-
-const authController = require("./src/controllers/auth.controller.js");
-const adminController = require("./src/controllers/admin.controller.js");
-
-const { signUpValidator } = require("./src/utils/signUpValidation.js");
-const { signInValidator } = require("./src/utils/signInValidation.js");
+const routes = require("./src/routes/index.js");
+const { globalErrorHandler } = require("./src/middlewares/errorHandler.js");
 
 const createApp = () => {
   const app = express();
@@ -15,29 +11,15 @@ const createApp = () => {
   app.use(cors());
   app.use(morgan("tiny"));
 
-  // Health Check
+  app.use(routes);
+
   app.get("/hello", async (req, res) => {
-    res.status(200).send("another hello authentication");
+    res.status(200).send("Hello Authentication Server!");
   });
 
-  app.post("/auth", signUpValidator, authController.signUp);
-
-  app.get("/auth", signInValidator, authController.signIn);
-
-  app.patch("/auth", authController.updatePassword);
-
-  app.delete("/auth", authController.deleteAccount);
-
-  app.delete("/authAdmin", authController.blockAccount);
-
-  // admin
-  app.get("/admin", adminController.getAllUsers);
-
-  app.use((error, req, res, next) => {
-    res.status(400).json({ message: error.message });
-  });
+  app.use(globalErrorHandler);
 
   return app;
 };
 
-module.exports = { createApp };
+module.exports = createApp;
