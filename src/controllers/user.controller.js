@@ -17,15 +17,6 @@ const signUp = async (req, res) => {
   }
 };
 
-const signIn = async (req, res) => {
-  const userInfo = req.body;
-  if (Object.values(userInfo).includes("")) {
-    detectError("User information is missing", 400);
-  }
-  const [isAdmin, token] = await userService.signIn(userInfo);
-  res.status(200).send({ message: "Successfully signed in", isAdmin, token });
-};
-
 const updatePassword = async (req, res) => {
   const token = req.headers.authorization;
   await userService.updatePassword(
@@ -46,7 +37,6 @@ const deleteAccount = async (req, res) => {
 
 module.exports = {
   signUp,
-  signIn,
   updatePassword,
   deleteAccount,
 };

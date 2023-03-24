@@ -1,29 +1,37 @@
 const mongoose = require("mongoose");
-const { userSchema } = require("../schemas/user.schema.js");
+const { accountSchema } = require("../schemas/account.schema.js");
 
-const User = mongoose.model("user", userSchema);
+const Account = mongoose.model("account", accountSchema);
 
-const getAllUsers = async () => {
+const showAccounts = async () => {
   try {
-    const user = await User.find({});
-    return user;
+    return await Account.find({});
   } catch (error) {
     throw error;
   }
 };
 
-const blockAccount = async (emailToBlock) => {
+const blockAccount = async (userId) => {
   try {
-    const user = await User.findOne({ email: emailToBlock });
-    user.isBlocked = true;
-    const blocked = await user.save();
-    return blocked;
+    const account = await Account.findOne({ _id: userId });
+    account.isBlocked = account.isBlocked ? false : true;
+    await account.save();
+  } catch (error) {
+    throw error;
+  }
+};
+
+const findAcctById = async (accountId) => {
+  try {
+    const account = await Account.findOne({ _id: accountId });
+    return account;
   } catch (error) {
     throw error;
   }
 };
 
 module.exports = {
-  getAllUsers,
+  showAccounts,
   blockAccount,
+  findAcctById,
 };

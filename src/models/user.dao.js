@@ -1,11 +1,11 @@
 const mongoose = require("mongoose");
-const { userSchema } = require("../schemas/user.schema.js");
+const { accountSchema } = require("../schemas/account.schema.js");
 
-const User = mongoose.model("user", userSchema);
+const Account = mongoose.model("account", accountSchema);
 
 const signUp = async (name, email, password) => {
   try {
-    await User.create({
+    await Account.create({
       name,
       email,
       password,
@@ -17,43 +17,37 @@ const signUp = async (name, email, password) => {
   }
 };
 
-const findUserByEmail = async (email) => {
+const findAcctByEmail = async (email) => {
   try {
-    const user = await User.findOne(
-      { email },
-      { _id: 1, email: 1, name: 1, password: 1, isAdmin: 1, isBlocked: 1 }
-    );
-    return user;
+    const account = await Account.findOne({ email });
+    return account;
   } catch (error) {
     throw error;
   }
 };
 
-const findUserById = async (userId) => {
+const findAcctById = async (accountId) => {
   try {
-    const user = await User.findOne(
-      { _id: userId },
-      { _id: 1, email: 1, name: 1, password: 1, isAdmin: 1, isBlocked: 1 }
-    );
-    return user;
+    const account = await Account.findOne({ _id: accountId });
+    return account;
   } catch (error) {
     throw error;
   }
 };
 
-const updatePassword = async (userId, newHashedPassword) => {
+const updatePassword = async (accountId, newHashedPassword) => {
   try {
-    const user = await User.findOne({ _id: userId });
-    user.password = newHashedPassword;
-    await user.save();
+    const account = await Account.findOne({ _id: accountId });
+    account.password = newHashedPassword;
+    await account.save();
   } catch (error) {
     throw error;
   }
 };
 
-const deleteAccount = async (userId) => {
+const deleteAccount = async (accountId) => {
   try {
-    await User.deleteOne({ _id: userId });
+    await Account.deleteOne({ _id: accountId });
   } catch (error) {
     throw error;
   }
@@ -61,8 +55,8 @@ const deleteAccount = async (userId) => {
 
 module.exports = {
   signUp,
-  findUserByEmail,
-  findUserById,
+  findAcctByEmail,
+  findAcctById,
   updatePassword,
   deleteAccount,
 };

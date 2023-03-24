@@ -11,11 +11,31 @@ const verifyUser = async (req, res, next) => {
     if (!decoded) {
       detectError("DECODING_TOKEN_FAILED");
     }
-    res.locals.id = decoded.id;
+    res.locals.accountId = decoded.accountId;
     next();
   } catch (error) {
     next(error);
   }
 };
 
-module.exports = verifyUser;
+const verifyAdmin = async (req, res, next) => {
+  try {
+    const token = req.headers.authorization;
+    if (!token) {
+      detectError("TOKEN_DOES_NOT_EXIST");
+    }
+    const decoded = await jwt.verify(token, process.env.SECRETE_KEY);
+    if (!decoded) {
+      detectError("DECODING_TOKEN_FAILED");
+    }
+    if (!decoded.isAdmin) {
+      detectError("ACCESS_NOT_ALLOWED_FOR_USER_ACCOUNT");
+    }
+    res.locals.accountId = decoded.accountId;
+    next();
+  } catch (error) {
+    next(error);
+  }
+};
+
+module.exports = { verifyUser, verifyAdmin };

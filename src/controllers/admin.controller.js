@@ -1,26 +1,18 @@
 const adminService = require("../services/admin.service.js");
 
-const getAllUsers = async (req, res) => {
-  const users = await adminService.getAllUsers();
-  res
-    .status(200)
-    .json({ message: "All users have been retrieved", users: users });
+const showAccounts = async (req, res) => {
+  const users = await adminService.showAccounts();
+  res.status(200).json(users);
 };
 
 const blockAccount = async (req, res) => {
-  const token = req.headers.authorization;
-  const blockedUser = await adminService.blockAccount(
-    token,
-    req.body.emailToBlock,
-    req.body.adminPassword
-  );
-  res.status(200).json({
-    message: "Admin blocked the account",
-    blockedUser: blockedUser,
-  });
+  const adminAcctId = res.locals.accountId;
+  const { userId, adminPassword } = req.body;
+  await adminService.blockAccount(userId, adminAcctId, adminPassword);
+  res.status(200).json({ message: "Successfully blocked account" });
 };
 
 module.exports = {
-  getAllUsers,
+  showAccounts,
   blockAccount,
 };
