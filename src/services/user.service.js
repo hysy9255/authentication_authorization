@@ -1,4 +1,3 @@
-const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const userDao = require("../models/user.dao");
 const { detectError } = require("../utils/error");
@@ -13,29 +12,25 @@ const signUp = async (userInfo) => {
   await userDao.signUp(name, email, hashedPassword);
 };
 
-const updatePassword = async (token, password, newPassword) => {
-  const decodedToken = jwt.verify(token, process.env.SECRETE_KEY);
-  const userId = decodedToken.userId;
-  const user = await userDao.findAcctById(userId);
-  const hashedPassword = user.password;
+const updatePassword = async (accountId, password, newPassword) => {
+  const account = await userDao.findAcctById(accountId);
+  const hashedPassword = account.password;
   const passwordMatches = await bcrypt.compare(password, hashedPassword);
   if (!passwordMatches) {
     detectError("Passed in wrong password", 400);
   }
-  const hashedNewPassword = await bcrypt.hash(newPassword, 10);
-  await userDao.updatePassword(userId, hashedNewPassword);
+  const newHashedPassword = await bcrypt.hash(newPassword, 10);
+  await userDao.updatePassword(accountId, newHashedPassword);
 };
 
-const deleteAccount = async (token, password) => {
-  const decodedToken = jwt.verify(token, process.env.SECRETE_KEY);
-  const userId = decodedToken.userId;
-  const user = await userDao.findAcctById(userId);
-  const hashedPassword = user.password;
+const deleteAccount = async (accountId, password) => {
+  const account = await userDao.findAcctById(accountId);
+  const hashedPassword = account.password;
   const passwordMatches = await bcrypt.compare(password, hashedPassword);
   if (!passwordMatches) {
     detectError("Passed in wrong password", 400);
   }
-  await userDao.deleteAccount(userId);
+  await userDao.deleteAccount(accountId);
 };
 
 module.exports = {
