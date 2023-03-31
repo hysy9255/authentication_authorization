@@ -7,10 +7,8 @@ const startServer = () => {
   mongoose.connect(process.env.DATABASE_URI, () => {
     console.log("Data source has been initialized");
   });
-
   const app = createApp();
   const PORT = 8000;
-
   app.listen(PORT, () => console.log(`server is listening on ${PORT}`));
 };
 

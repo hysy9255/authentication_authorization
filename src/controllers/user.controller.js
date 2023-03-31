@@ -1,29 +1,17 @@
 const userService = require("../services/user.service.js");
 const superagent = require("superagent");
-const { detectError } = require("./../utils/error.js");
+const { createUserPage, deleteUserPage } = require("../utils/superagent.js");
+const { userControllerErrors } = require("./utils/controller.error.js");
 
 const signUp = async (req, res) => {
   const userInfo = req.body;
-  if (Object.values(userInfo).includes("")) {
-    detectError("User information is missing", 400);
-  }
+  userControllerErrors.checkInputValues(userInfo);
+  userControllerErrors.checkEmail(userInfo.email);
+  userControllerErrors.checkPassword(userInfo.password);
 
-  const validEmail = userInfo.email.split("").includes("@");
-  if (!validEmail) {
-    detectError("It's an invalid email address", 400);
-  }
-
-  const validPassword = userInfo.password.length > 5;
-  if (!validPassword) {
-    detectError("It's an invalid password", 400);
-  }
-
-  await userService.signUp(userInfo);
-
-  const userPageIP = "http://localhost:5000/userPage";
-  const resFromUserPage = await superagent.post(userPageIP).send(userInfo);
-
-  if (resFromUserPage.status === 201) {
+  const account = await userService.signUp(userInfo);
+  const response = await createUserPage(account);
+  if (response.body.message === "User page has been created") {
     res.status(201).json({ message: "User has been created!" });
   }
 };
@@ -41,7 +29,11 @@ const deleteAccount = async (req, res) => {
   const accountId = res.locals.accountId;
   const password = req.body.password;
   await userService.deleteAccount(accountId, password);
-  res.status(200).json({ message: "Successfully deleted the account!" });
+
+  const response = await deleteUserPage(accountId);
+  if (response.status === 200) {
+    res.status(200).json({ message: "Successfully deleted the account" });
+  }
 };
 
 module.exports = {

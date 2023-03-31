@@ -1,9 +1,9 @@
 const express = require("express");
-const userRouter = express.Router();
-const userController = require("./../controllers/user.controller");
-const { asyncWrap } = require("./../utils/error");
-const { verifyUser } = require("./../middlewares/signInRequired");
+const userController = require("./../controllers/user.controller.js");
+const { asyncWrap } = require("./../utils/error.js");
+const { verifyUser } = require("./../middlewares/signInRequired.js");
 
+const userRouter = express.Router();
 userRouter.post("/signUp", asyncWrap(userController.signUp));
 userRouter.patch(
   "/password",

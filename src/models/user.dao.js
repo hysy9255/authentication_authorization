@@ -5,7 +5,7 @@ const Account = mongoose.model("account", accountSchema);
 
 const signUp = async (name, email, password) => {
   try {
-    await Account.create({
+    return await Account.create({
       name,
       email,
       password,
@@ -28,8 +28,7 @@ const findAcctByEmail = async (email) => {
 
 const findAcctById = async (accountId) => {
   try {
-    const account = await Account.findOne({ _id: accountId });
-    return account;
+    return await Account.findById(accountId);
   } catch (error) {
     throw error;
   }

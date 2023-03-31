@@ -6,19 +6,11 @@ const { globalErrorHandler } = require("./src/middlewares/errorHandler.js");
 
 const createApp = () => {
   const app = express();
-
   app.use(express.json());
   app.use(cors());
   app.use(morgan("tiny"));
-
   app.use(routes);
-
-  app.get("/hello", async (req, res) => {
-    res.status(200).send("Hello Authentication Server!");
-  });
-
   app.use(globalErrorHandler);
-
   return app;
 };
 
