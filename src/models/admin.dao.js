@@ -24,7 +24,7 @@ const blockAccount = async (userId) => {
 
 const findAcctById = async (accountId) => {
   try {
-    const account = await Account.findOne({ _id: accountId });
+    const account = await Account.findById(accountId);
     return account;
   } catch (error) {
     throw error;

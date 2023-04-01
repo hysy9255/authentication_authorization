@@ -1,13 +1,12 @@
 const userService = require("../services/user.service.js");
-const superagent = require("superagent");
 const { createUserPage, deleteUserPage } = require("../utils/superagent.js");
-const { userControllerErrors } = require("./utils/controller.error.js");
+const error = require("./utils/controller.error.js");
 
 const signUp = async (req, res) => {
   const userInfo = req.body;
-  userControllerErrors.checkInputValues(userInfo);
-  userControllerErrors.checkEmail(userInfo.email);
-  userControllerErrors.checkPassword(userInfo.password);
+  error.checkInputValues(userInfo);
+  error.checkEmail(userInfo.email);
+  error.checkPassword(userInfo.password);
 
   const account = await userService.signUp(userInfo);
   const response = await createUserPage(account);
