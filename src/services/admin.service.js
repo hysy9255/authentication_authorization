@@ -1,6 +1,4 @@
-const { detectError } = require("../utils/error.js");
 const adminDao = require("./../models/admin.dao.js");
-const bcrypt = require("bcrypt");
 const { checkPassword } = require("./utils/service.error.js");
 
 const showAccounts = async () => {
@@ -11,7 +9,8 @@ const blockAccount = async (userId, adminAcctId, adminPassword) => {
   const admin = await adminDao.findAcctById(adminAcctId);
   await checkPassword(admin, adminPassword);
 
-  await adminDao.blockAccount(userId);
+  const user = await adminDao.blockAccount(userId);
+  return user.isBlocked;
 };
 
 module.exports = {

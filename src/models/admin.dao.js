@@ -15,7 +15,7 @@ const blockAccount = async (userId) => {
   try {
     const account = await Account.findById(userId);
     account.isBlocked = account.isBlocked ? false : true;
-    await account.save();
+    return await account.save();
   } catch (error) {
     throw error;
   }

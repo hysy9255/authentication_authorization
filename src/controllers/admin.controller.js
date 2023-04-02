@@ -11,9 +11,17 @@ const blockAccount = asyncWrap(async (req, res) => {
   const adminAcctId = res.locals.accountId;
   const { userId, adminPassword } = req.body;
 
-  await adminService.blockAccount(userId, adminAcctId, adminPassword);
+  const blocked = await adminService.blockAccount(
+    userId,
+    adminAcctId,
+    adminPassword
+  );
 
-  res.status(200).json({ message: "Successfully blocked account" });
+  const message = blocked
+    ? "Successfully blocked account"
+    : "Successfully unblocked account";
+
+  res.status(200).json({ message });
 });
 
 module.exports = {

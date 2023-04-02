@@ -5,6 +5,7 @@ const error = require("./utils/service.error.js");
 const signIn = async (accountInfo) => {
   const { email, password } = accountInfo;
   const account = await tokenDao.findAcctByEmail(email);
+
   error.checkIfAcctExist(account);
   error.checkIfAcctIsBlocked(account);
   await error.checkPassword(account, password);
