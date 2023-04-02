@@ -2,12 +2,12 @@ const bcrypt = require("bcrypt");
 const userDao = require("../models/user.dao");
 const error = require("./utils/service.error");
 
-const signUp = async (userInfo) => {
+const createAccount = async (userInfo) => {
   const { name, email, password } = userInfo;
   await error.checkEmail(email);
 
   const hashedPassword = await bcrypt.hash(password, 10);
-  return await userDao.signUp(name, email, hashedPassword);
+  return await userDao.createAccount(name, email, hashedPassword);
 };
 
 const updatePassword = async (accountId, password, newPassword) => {
@@ -25,7 +25,7 @@ const deleteAccount = async (accountId, password) => {
 };
 
 module.exports = {
-  signUp,
+  createAccount,
   updatePassword,
   deleteAccount,
 };

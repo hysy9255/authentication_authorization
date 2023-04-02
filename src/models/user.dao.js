@@ -3,7 +3,7 @@ const { accountSchema } = require("../schemas/account.schema.js");
 
 const Account = mongoose.model("account", accountSchema);
 
-const signUp = async (name, email, password) => {
+const createAccount = async (name, email, password) => {
   try {
     return await Account.create({
       name,
@@ -53,7 +53,7 @@ const deleteAccount = async (accountId) => {
 };
 
 module.exports = {
-  signUp,
+  createAccount,
   findAcctByEmail,
   findAcctById,
   updatePassword,

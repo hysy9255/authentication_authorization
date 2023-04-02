@@ -13,8 +13,7 @@ const showAccounts = async () => {
 
 const blockAccount = async (userId) => {
   try {
-    const account = await Account.findOne({ _id: userId });
-    console.log(userId);
+    const account = await Account.findById(userId);
     account.isBlocked = account.isBlocked ? false : true;
     await account.save();
   } catch (error) {

@@ -1,14 +1,14 @@
 const express = require("express");
 const adminRouter = express.Router();
-const adminController = require("./../controllers/admin.controller");
-const { asyncWrap } = require("./../utils/error");
 const { verifyAdmin } = require("./../middlewares/signInRequired");
+const {
+  showAccounts,
+  blockAccount,
+} = require("./../controllers/admin.controller");
 
 adminRouter.use(verifyAdmin);
-adminRouter.get("/userAccount", asyncWrap(adminController.showAccounts));
-adminRouter.patch(
-  "/userAccount/access",
-  asyncWrap(adminController.blockAccount)
-);
+
+adminRouter.get("/userAccounts", showAccounts);
+adminRouter.patch("/userAccount/access", blockAccount);
 
 module.exports = adminRouter;

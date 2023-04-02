@@ -1,16 +1,20 @@
 const adminService = require("../services/admin.service.js");
+const { asyncWrap } = require("./../utils/error");
 
-const showAccounts = async (req, res) => {
+const showAccounts = asyncWrap(async (req, res) => {
   const users = await adminService.showAccounts();
-  res.status(200).json(users);
-};
 
-const blockAccount = async (req, res) => {
+  res.status(200).json(users);
+});
+
+const blockAccount = asyncWrap(async (req, res) => {
   const adminAcctId = res.locals.accountId;
   const { userId, adminPassword } = req.body;
+
   await adminService.blockAccount(userId, adminAcctId, adminPassword);
+
   res.status(200).json({ message: "Successfully blocked account" });
-};
+});
 
 module.exports = {
   showAccounts,

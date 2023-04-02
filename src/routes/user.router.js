@@ -1,19 +1,16 @@
 const express = require("express");
-const userController = require("./../controllers/user.controller.js");
-const { asyncWrap } = require("./../utils/error.js");
 const { verifyUser } = require("./../middlewares/signInRequired.js");
 
+const {
+  createAccount,
+  deleteAccount,
+  updatePassword,
+} = require("./../controllers/user.controller.js");
+
 const userRouter = express.Router();
-userRouter.post("/signUp", asyncWrap(userController.signUp));
-userRouter.patch(
-  "/password",
-  verifyUser,
-  asyncWrap(userController.updatePassword)
-);
-userRouter.delete(
-  "/account",
-  verifyUser,
-  asyncWrap(userController.deleteAccount)
-);
+
+userRouter.post("", createAccount);
+userRouter.delete("", verifyUser, deleteAccount);
+userRouter.patch("/password", verifyUser, updatePassword);
 
 module.exports = userRouter;
