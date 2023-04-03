@@ -5,8 +5,7 @@ const Account = mongoose.model("account", accountSchema);
 
 const findAcctById = async (accountId) => {
   try {
-    const account = await Account.findById(accountId);
-    return account;
+    return await Account.findById(accountId);
   } catch (error) {
     throw error;
   }

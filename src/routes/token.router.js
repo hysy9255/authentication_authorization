@@ -1,8 +1,7 @@
 const express = require("express");
 const tokenRouter = express.Router();
-const tokenController = require("../controllers/token.controller.js");
-const { asyncWrap } = require("../utils/error.js");
+const { signIn } = require("../controllers/token.controller.js");
 
-tokenRouter.post("", asyncWrap(tokenController.signIn));
+tokenRouter.post("", signIn);
 
 module.exports = tokenRouter;

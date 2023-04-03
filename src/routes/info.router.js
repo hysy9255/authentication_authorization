@@ -1,8 +1,7 @@
 const express = require("express");
 const infoRouter = express.Router();
-const infoController = require("../controllers/info.controller.js");
-const { asyncWrap } = require("../utils/error.js");
+const { getUserInfo } = require("../controllers/info.controller.js");
 
-infoRouter.get("", asyncWrap(infoController.getUserInfo));
+infoRouter.get("", getUserInfo);
 
 module.exports = infoRouter;
