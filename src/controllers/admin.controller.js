@@ -9,13 +9,9 @@ const showAccounts = asyncWrap(async (req, res) => {
 
 const blockAccount = asyncWrap(async (req, res) => {
   const adminAcctId = res.locals.accountId;
-  const { userId, adminPassword } = req.body;
+  const requestData = req.body;
 
-  const blocked = await adminService.blockAccount(
-    userId,
-    adminAcctId,
-    adminPassword
-  );
+  const blocked = await adminService.blockAccount(adminAcctId, requestData);
 
   const message = blocked
     ? "Successfully blocked account"

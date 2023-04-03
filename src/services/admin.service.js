@@ -5,7 +5,9 @@ const showAccounts = async () => {
   return await adminDao.showAccounts();
 };
 
-const blockAccount = async (userId, adminAcctId, adminPassword) => {
+const blockAccount = async (adminAcctId, requestData) => {
+  const { userId, adminPassword } = requestData;
+
   const admin = await adminDao.findAcctById(adminAcctId);
   await checkPassword(admin, adminPassword);
 
