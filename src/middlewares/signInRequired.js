@@ -18,6 +18,25 @@ const verifyUser = async (req, res, next) => {
   }
 };
 
+const verifyUserOptionally = async (req, res, next) => {
+  try {
+    const token = req.headers.authorization;
+    if (!token) {
+      return next();
+    }
+
+    const decoded = await jwt.verify(token, process.env.SECRETE_KEY);
+    if (!decoded) {
+      detectError("DECODING_TOKEN_FAILED");
+    }
+
+    res.locals.accountId = decoded.accountId;
+    next();
+  } catch (error) {
+    next(error);
+  }
+};
+
 const verifyAdmin = async (req, res, next) => {
   try {
     const token = req.headers.authorization;
@@ -38,4 +57,4 @@ const verifyAdmin = async (req, res, next) => {
   }
 };
 
-module.exports = { verifyUser, verifyAdmin };
+module.exports = { verifyUser, verifyUserOptionally, verifyAdmin };
