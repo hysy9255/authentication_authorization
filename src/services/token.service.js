@@ -1,7 +1,7 @@
 const jwt = require("jsonwebtoken");
 const tokenDao = require("../models/token.dao.js");
 const error = require("./utils/service.error.js");
-
+// ***
 const signIn = async (accountInfo) => {
   const { email, password } = accountInfo;
   const account = await tokenDao.findAcctByEmail(email);

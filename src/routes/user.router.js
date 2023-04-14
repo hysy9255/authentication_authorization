@@ -1,6 +1,5 @@
 const express = require("express");
 const { verifyUser } = require("./../middlewares/signInRequired.js");
-
 const {
   createAccount,
   deleteAccount,
@@ -9,8 +8,8 @@ const {
 
 const userRouter = express.Router();
 
-userRouter.post("", createAccount);
-userRouter.delete("", verifyUser, deleteAccount);
-userRouter.patch("/password", verifyUser, updatePassword);
+userRouter.post("", createAccount); // ***
+userRouter.delete("", verifyUser, deleteAccount); // ***
+userRouter.patch("/password", verifyUser, updatePassword); // ***
 
 module.exports = userRouter;
